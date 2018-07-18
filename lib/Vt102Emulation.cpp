@@ -55,6 +55,11 @@
 #include "KeyboardTranslator.h"
 #include "Screen.h"
 
+#if defined(Q_OS_MAC)
+    Qt::KeyboardModifier controlModifier = Qt::MetaModifier;
+#else
+    Qt::KeyboardModifier controlModifier = Qt::ControlModifier;
+#endif
 
 using namespace Konsole;
 
@@ -908,7 +913,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
         states |= KeyboardTranslator::ApplicationKeypadState;
 
     // check flow control state
-    if (modifiers & Qt::ControlModifier)
+    if (modifiers & controlModifier)
     {
         if (event->key() == Qt::Key_S)
             emit flowControlKeyPressed(true);
@@ -955,7 +960,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
         {
             textToSend += entry.text(true,modifiers);
         }
-        else if((modifiers & Qt::ControlModifier) && event->key() >= 0x40 && event->key() < 0x5f) {
+        else if((modifiers & controlModifier) && event->key() >= 0x40 && event->key() < 0x5f) {
             textToSend += (event->key() & 0x1f);
         }
         else if(event->key() == Qt::Key_Tab) {
