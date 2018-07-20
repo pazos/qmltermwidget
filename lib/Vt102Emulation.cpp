@@ -1236,9 +1236,11 @@ void Vt102Emulation::reportDecodingError()
 {
   if (tokenBufferPos == 0 || ( tokenBufferPos == 1 && (tokenBuffer[0] & 0xff) >= 32) ) 
     return;
+  #ifndef Q_OS_MAC
   printf("Undecodable sequence: "); 
   hexdump(tokenBuffer,tokenBufferPos); 
   printf("\n");
+  #endif
 }
 
 //#include "Vt102Emulation.moc"
